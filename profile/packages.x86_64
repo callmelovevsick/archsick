@@ -1,5 +1,5 @@
 ## Arch Packages ------------------------------
-#alsa-utils
+alsa-utils
 amd-ucode
 arch-install-scripts
 archinstall
@@ -164,7 +164,7 @@ mesa-utils
 
 ## GPU Drivers (Nvidia) ------------------------------
 xf86-video-nouveau
-nvidia
+nvidia-open
 nvidia-utils
 nvidia-settings
 
@@ -284,7 +284,7 @@ dialog
 dunst
 galculator
 gparted
-gtk-engine-murrine
+#gtk-engine-murrine
 gnome-keyring
 inetutils
 inotify-tools
