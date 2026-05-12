@@ -1,5 +1,13 @@
 <h2 align="center">Archcraft : Changelogs</h2>
 
+### May 2026
+- Updated ISO profile to `archiso 88-1`
+- Latest base with new packages
+- Update some Archcraft and all AUR packages
+- Small improvements and bugs fixed.
+
+#
+
 ### February 2026
 - Support for `xfs` has been dropped due to bugs (`grub` fails to install)
 - Encryption does not work with `ABIF` (CLI installer) due to `plymouth` update (no `plymouth-encrypt` hook in new versions) 

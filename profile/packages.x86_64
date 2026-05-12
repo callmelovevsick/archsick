@@ -299,7 +299,7 @@ plank
 polkit
 polybar
 python-pywal
-#rofi
+rofi
 maim
 simplescreenrecorder
 slop
@@ -373,7 +373,7 @@ gvfs-mtp
 gvfs-afc
 gvfs-gphoto2
 gvfs-smb
-gvfs-google
+gvfs-gphoto2
 highlight
 trash-cli
 ueberzug
@@ -423,14 +423,14 @@ vim
 ## AUR Packages
 betterlockscreen
 downgrade
-gtk3-nocsd-git
+gtk-nocsd-git
 i3lock-color
 ksuperkey
 mkinitcpio-firmware
 networkmanager-dmenu-git
 obmenu-generator
 perl-linux-desktopfiles
-rofi-lbonn-wayland-git
+#rofi-lbonn-wayland-git
 xfce-polkit
 yay
 

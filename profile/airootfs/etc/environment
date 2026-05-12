@@ -11,3 +11,6 @@ PATH="/usr/share/archcraft/scripts"
 
 # uncomment only if cursor is not visible in wayland sessions
 #WLR_NO_HARDWARE_CURSORS=1
+
+# disable csd
+LD_PRELOAD=/usr/lib/libgtk-nocsd.so
