@@ -1,0 +1,76 @@
+#!/usr/bin/env bash
+# ============================================================
+# ArchSick Openbox autostart
+# ~/.config/openbox/autostart
+# Developer: lovevsick
+# ============================================================
+
+# ── Helpers ──────────────────────────────────────────────────
+_run() { command -v "$1" &>/dev/null && "$@" & }
+_run_once() {
+    local name="${1##*/}"
+    pgrep -x "$name" &>/dev/null || _run "$@"
+}
+
+# ── X settings ───────────────────────────────────────────────
+# Keyboard repeat rate
+xset r rate 300 50 &
+# Disable screen saver / blanking
+xset s off s noblank &
+# Disable DPMS (allow games/video to run without blanking)
+xset -dpms &
+# Natural scrolling + accel
+xinput set-prop "$(xinput list --name-only | grep -i touchpad | head -1)" \
+    "libinput Natural Scrolling Enabled" 1 2>/dev/null || true
+
+# ── Cursor ───────────────────────────────────────────────────
+xsetroot -cursor_name left_ptr &
+
+# ── Wallpaper ────────────────────────────────────────────────
+feh --no-fehbg --bg-fill /usr/share/archsick/wallpapers/default.jpg &
+
+# ── Compositor (picom) ───────────────────────────────────────
+_run_once picom \
+    --config ~/.config/picom/picom.conf \
+    --daemon
+
+# ── Panel (tint2) ────────────────────────────────────────────
+sleep 0.2
+_run_once tint2 -c ~/.config/tint2/tint2rc &
+
+# ── Notification daemon ───────────────────────────────────────
+_run_once dunst -config ~/.config/dunst/dunstrc &
+
+# ── NetworkManager applet ────────────────────────────────────
+_run_once nm-applet &
+
+# ── Polkit agent ─────────────────────────────────────────────
+_run_once /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1 &
+
+# ── Volume tray (optional) ───────────────────────────────────
+# _run_once pasystray &
+
+# ── Clipboard manager ────────────────────────────────────────
+# _run_once clipit &
+
+# ── Power management ─────────────────────────────────────────
+# xss-lock handles screen lock on suspend
+xss-lock --transfer-sleep-lock -- \
+    i3lock -c 0d1117 --nofork &
+
+# ── Keyring ──────────────────────────────────────────────────
+eval "$(gnome-keyring-daemon --start --components=pkcs11,secrets,ssh 2>/dev/null)" || true
+export GNOME_KEYRING_CONTROL SSH_AUTH_SOCK
+
+# ── udiskie (automount) ──────────────────────────────────────
+_run_once udiskie --tray &
+
+# ── First-run wizard ─────────────────────────────────────────
+if [[ ! -f "$HOME/.local/share/archsick/.firstrun-done" ]]; then
+    (sleep 5 && alacritty -T "ArchSick First Run" -e archsick-firstrun) &
+fi
+
+# ── Fastfetch on terminal open (via .zshrc, not here) ────────
+# Handled in shell config
+
+echo "ArchSick autostart complete: $(date)" >> /tmp/archsick-autostart.log

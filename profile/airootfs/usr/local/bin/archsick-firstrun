@@ -1,0 +1,242 @@
+#!/usr/bin/env bash
+# ============================================================
+# /usr/local/bin/archsick-firstrun
+# Runs once after first real user login (not live session)
+# Installs AUR packages, VSCodium, configures dev environment
+# Developer: lovevsick
+# ============================================================
+set -euo pipefail
+
+LOGFILE="$HOME/.local/share/archsick/firstrun.log"
+DONEFILE="$HOME/.local/share/archsick/.firstrun-done"
+mkdir -p "$(dirname "$LOGFILE")"
+
+[[ -f "$DONEFILE" ]] && exit 0
+
+exec > >(tee -a "$LOGFILE") 2>&1
+
+info()  { echo "[INFO]  $*"; }
+ok()    { echo "[OK]    $*"; }
+err()   { echo "[ERROR] $*"; }
+step()  { echo; echo "=====> $*"; echo; }
+
+step "ArchSick first-run setup"
+info "Log: $LOGFILE"
+
+# ── Install yay (AUR helper) ─────────────────────────────────
+step "Installing yay AUR helper"
+if ! command -v yay &>/dev/null; then
+    cd /tmp
+    rm -rf yay-bin
+    git clone https://aur.archlinux.org/yay-bin.git
+    cd yay-bin
+    makepkg -si --noconfirm
+    cd /tmp
+    rm -rf yay-bin
+    ok "yay installed"
+else
+    ok "yay already present"
+fi
+
+# ── Install VSCodium ─────────────────────────────────────────
+step "Installing VSCodium"
+if ! command -v codium &>/dev/null; then
+    yay -S --noconfirm vscodium-bin
+    ok "VSCodium installed"
+else
+    ok "VSCodium already present"
+fi
+
+# ── VSCodium C++ configuration ───────────────────────────────
+step "Configuring VSCodium for C++ development"
+
+CODIUM_CFG_DIR="$HOME/.config/VSCodium/User"
+mkdir -p "$CODIUM_CFG_DIR"
+
+cat > "$CODIUM_CFG_DIR/settings.json" << 'EOF'
+{
+    "editor.fontFamily": "'JetBrains Mono', 'Noto Sans Mono', monospace",
+    "editor.fontSize": 14,
+    "editor.lineHeight": 22,
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "editor.formatOnSave": true,
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.bracketPairColorization.enabled": true,
+    "editor.minimap.enabled": false,
+    "editor.renderWhitespace": "selection",
+
+    "terminal.integrated.fontFamily": "'JetBrains Mono', monospace",
+    "terminal.integrated.fontSize": 13,
+    "terminal.integrated.defaultProfile.linux": "zsh",
+
+    "files.autoSave": "onFocusChange",
+    "files.trimTrailingWhitespace": true,
+
+    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.startupEditor": "none",
+
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.intelliSenseMode": "linux-gcc-x64",
+    "C_Cpp.default.includePath": [
+        "${workspaceFolder}/**",
+        "/usr/include/**",
+        "/usr/local/include/**"
+    ],
+    "C_Cpp.clang_format_style": "{ BasedOnStyle: LLVM, IndentWidth: 4 }",
+    "C_Cpp.errorSquiggles": "enabled",
+
+    "cmake.generator": "Ninja",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.configureOnOpen": true,
+
+    "git.autofetch": true,
+    "telemetry.telemetryLevel": "off",
+    "update.mode": "none"
+}
+EOF
+
+# Install VSCodium extensions
+CODIUM_EXTENSIONS=(
+    "ms-vscode.cpptools"
+    "ms-vscode.cmake-tools"
+    "twxs.cmake"
+    "ms-python.python"
+    "esbenp.prettier-vscode"
+    "eamodio.gitlens"
+    "usernamehw.errorlens"
+    "PKief.material-icon-theme"
+)
+for ext in "${CODIUM_EXTENSIONS[@]}"; do
+    codium --install-extension "$ext" --force 2>/dev/null || true
+done
+ok "VSCodium configured"
+
+# ── Global C++17 cmake template ──────────────────────────────
+step "Installing C++ project template"
+TEMPLATE_DIR="$HOME/.local/share/archsick/templates/cpp"
+mkdir -p "$TEMPLATE_DIR"
+
+cat > "$TEMPLATE_DIR/CMakeLists.txt" << 'EOF'
+cmake_minimum_required(VERSION 3.16)
+project(myproject LANGUAGES CXX)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Build type
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+# Compiler flags
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -fsanitize=address,undefined -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+
+add_executable(${PROJECT_NAME} main.cpp)
+
+target_compile_options(${PROJECT_NAME} PRIVATE
+    -Wall -Wextra -Wpedantic
+    -Wno-unused-parameter
+)
+EOF
+
+cat > "$TEMPLATE_DIR/main.cpp" << 'EOF'
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    // Your code here
+    cout << "Hello from ArchSick!" << endl;
+    return 0;
+}
+EOF
+
+# Add new-cpp-project helper
+cat > "$HOME/.local/bin/new-cpp" << 'SCRIPT'
+#!/usr/bin/env bash
+# Usage: new-cpp [project-name]
+NAME="${1:-myproject}"
+mkdir -p "$NAME/build"
+cp ~/.local/share/archsick/templates/cpp/CMakeLists.txt "$NAME/"
+cp ~/.local/share/archsick/templates/cpp/main.cpp "$NAME/"
+sed -i "s/myproject/$NAME/" "$NAME/CMakeLists.txt"
+echo "Created C++17 project: $NAME"
+echo "  cd $NAME && cmake -B build -G Ninja && cmake --build build"
+SCRIPT
+chmod +x "$HOME/.local/bin/new-cpp"
+ok "C++ template installed (use 'new-cpp project-name')"
+
+# ── ZSH setup ────────────────────────────────────────────────
+step "Configuring Zsh"
+if [[ ! -d "$HOME/.oh-my-zsh" ]]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+    ok "oh-my-zsh installed"
+fi
+
+# Install powerlevel10k theme
+if [[ ! -d "$HOME/.oh-my-zsh/custom/themes/powerlevel10k" ]]; then
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git \
+        "$HOME/.oh-my-zsh/custom/themes/powerlevel10k"
+    ok "powerlevel10k installed"
+fi
+
+# Install zsh plugins
+ZSH_CUSTOM="$HOME/.oh-my-zsh/custom"
+[[ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]] && \
+    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions \
+        "$ZSH_CUSTOM/plugins/zsh-autosuggestions"
+[[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]] && \
+    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting \
+        "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+
+ok "Zsh configured"
+
+# ── osu!lazer ────────────────────────────────────────────────
+step "Installing osu!lazer"
+if ! command -v osu &>/dev/null && ! snap list osu-lazer &>/dev/null 2>&1; then
+    yay -S --noconfirm osu-lazer-bin 2>/dev/null || \
+        yay -S --noconfirm osu-lazer 2>/dev/null || \
+        info "osu!lazer: install manually from https://osu.ppy.sh/home/download"
+else
+    ok "osu!lazer already present"
+fi
+
+# GameMode for osu!
+cat >> "$HOME/.config/osu/osu.cfg" << 'EOF' 2>/dev/null || true
+# ArchSick performance note:
+# Launch with: gamemoderun osu
+EOF
+
+# ── Minecraft Java ───────────────────────────────────────────
+step "Installing Prism Launcher (Minecraft)"
+if ! command -v prismlauncher &>/dev/null; then
+    yay -S --noconfirm prismlauncher-bin 2>/dev/null || \
+        info "PrismLauncher: install manually from https://prismlauncher.org"
+else
+    ok "Prism Launcher already present"
+fi
+
+# ── Git global config ────────────────────────────────────────
+step "Git configuration"
+if [[ -z "$(git config --global user.email 2>/dev/null)" ]]; then
+    info "Set your git identity:"
+    info "  git config --global user.name  'Your Name'"
+    info "  git config --global user.email 'you@example.com'"
+fi
+git config --global core.editor "nano"
+git config --global init.defaultBranch "main"
+git config --global pull.rebase false
+
+# ── Mark done ────────────────────────────────────────────────
+touch "$DONEFILE"
+step "ArchSick first-run complete!"
+info "Log saved to $LOGFILE"
+info "Reboot recommended to apply all kernel parameters."

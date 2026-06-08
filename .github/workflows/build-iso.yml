@@ -1,0 +1,259 @@
+# ============================================================
+# ArchSick GitHub Actions - ISO Build Pipeline
+# Developer: lovevsick
+# ============================================================
+
+name: Build ArchSick ISO
+
+on:
+    push:
+        branches: [main, dev]
+        tags: ['v*.*.*']
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
+        inputs:
+            release_type:
+                description: 'Release type'
+                required: true
+                default: 'snapshot'
+                type: choice
+                options:
+                    - snapshot
+                    - stable
+                    - testing
+
+jobs:
+    # ── Lint & validate configs ────────────────────────────────
+    validate:
+        name: Validate Configs
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Validate XML configs
+              run: |
+                  sudo apt-get install -y libxml2-utils
+                  xmllint --noout config/openbox/rc.xml
+                  xmllint --noout config/openbox/menu.xml
+                  echo "XML configs valid"
+
+            - name: Validate shell scripts
+              run: |
+                  sudo apt-get install -y shellcheck
+                  shellcheck build/customize_airootfs.sh
+                  shellcheck config/openbox/autostart.sh
+                  shellcheck scripts/archsick-firstrun.sh
+                  echo "Shell scripts valid"
+
+            - name: Check package list
+              run: |
+                  python3 -c "
+                  with open('build/packages.x86_64') as f:
+                      lines = [l.strip() for l in f if l.strip() and not l.startswith('#')]
+                  # Check for obvious duplicates
+                  seen = {}
+                  dupes = []
+                  for pkg in lines:
+                      if pkg in seen:
+                          dupes.append(pkg)
+                      seen[pkg] = True
+                  if dupes:
+                      print(f'DUPLICATE PACKAGES: {dupes}')
+                      exit(1)
+                  print(f'Package list OK: {len(lines)} packages')
+                  "
+
+    # ── Build the ISO ─────────────────────────────────────────
+    build-iso:
+        name: Build ISO
+        runs-on: ubuntu-latest
+        needs: validate
+        container:
+            image: archlinux:latest
+            options: --privileged
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Install build dependencies
+              run: |
+                  pacman -Syu --noconfirm
+                  pacman -S --noconfirm \
+                      archiso \
+                      base-devel \
+                      git \
+                      squashfs-tools \
+                      libisoburn \
+                      dosfstools \
+                      e2fsprogs \
+                      mtools \
+                      libarchive
+
+            - name: Import ArchSick GPG key
+              env:
+                  GPG_PRIVATE_KEY: ${{ secrets.ARCHSICK_GPG_KEY }}
+              run: |
+                  echo "$GPG_PRIVATE_KEY" | gpg --import || true
+
+            - name: Prepare archiso profile
+              run: |
+                  mkdir -p /build/archsick-profile
+                  # Copy base archiso releng profile
+                  cp -r /usr/share/archiso/configs/releng/. /build/archsick-profile/
+                  # Overlay ArchSick customizations
+                  cp build/packages.x86_64 /build/archsick-profile/
+                  cp build/profiledef.sh   /build/archsick-profile/
+                  cp build/pacman.conf     /build/archsick-profile/ 2>/dev/null || true
+                  # Airootfs overlay
+                  mkdir -p /build/archsick-profile/airootfs/etc/archsick
+                  mkdir -p /build/archsick-profile/airootfs/usr/local/bin
+                  mkdir -p /build/archsick-profile/airootfs/etc/{openbox,sddm.conf.d}
+                  cp build/customize_airootfs.sh /build/archsick-profile/airootfs/root/
+                  cp scripts/archsick-firstrun.sh /build/archsick-profile/airootfs/usr/local/bin/archsick-firstrun
+                  # Config overlay
+                  cp -r config/openbox/. /build/archsick-profile/airootfs/etc/archsick/openbox/
+                  cp -r config/picom/    /build/archsick-profile/airootfs/etc/archsick/picom/
+                  cp -r config/rofi/     /build/archsick-profile/airootfs/etc/archsick/rofi/
+                  cp -r config/terminal/ /build/archsick-profile/airootfs/etc/archsick/alacritty/
+                  cp -r config/fastfetch/ /build/archsick-profile/airootfs/etc/archsick/fastfetch/
+                  cp -r config/zsh/      /build/archsick-profile/airootfs/etc/skel/
+                  # Branding
+                  mkdir -p /build/archsick-profile/airootfs/usr/share/archsick/{wallpapers,ascii}
+                  cp -r branding/. /build/archsick-profile/airootfs/usr/share/archsick/ 2>/dev/null || true
+
+            - name: Set version
+              id: version
+              run: |
+                  if [[ "${{ github.ref }}" == refs/tags/* ]]; then
+                      VERSION="${{ github.ref_name }}"
+                  elif [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+                      VERSION="${{ github.event.inputs.release_type }}-$(date +%Y%m%d)"
+                  else
+                      VERSION="snapshot-$(date +%Y%m%d)-${GITHUB_SHA::8}"
+                  fi
+                  echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+                  echo "ISO_NAME=archsick-$VERSION-x86_64.iso" >> $GITHUB_OUTPUT
+
+            - name: Build ISO with mkarchiso
+              run: |
+                  cd /build
+                  mkarchiso -v \
+                      -w /tmp/archsick-work \
+                      -o /output \
+                      archsick-profile
+                  ls -lh /output/*.iso
+
+            - name: Generate checksums
+              run: |
+                  cd /output
+                  sha256sum *.iso > SHA256SUMS
+                  sha512sum *.iso > SHA512SUMS
+                  cat SHA256SUMS
+
+            - name: Rename ISO
+              run: |
+                  cd /output
+                  ISO_FILE=$(ls archsick*.iso | head -1)
+                  mv "$ISO_FILE" "${{ steps.version.outputs.ISO_NAME }}"
+
+            - name: Upload ISO artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: archsick-iso-${{ steps.version.outputs.VERSION }}
+                  path: |
+                      /output/${{ steps.version.outputs.ISO_NAME }}
+                      /output/SHA256SUMS
+                      /output/SHA512SUMS
+                  retention-days: 30
+
+    # ── Test the ISO in QEMU ──────────────────────────────────
+    test-iso:
+        name: Smoke Test ISO (QEMU)
+        runs-on: ubuntu-latest
+        needs: build-iso
+        if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/')
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Download built ISO
+              uses: actions/download-artifact@v4
+              with:
+                  name: archsick-iso-${{ needs.build-iso.outputs.VERSION }}
+                  path: /tmp/iso
+
+            - name: Install QEMU
+              run: |
+                  sudo apt-get install -y qemu-system-x86 qemu-utils ovmf
+
+            - name: Create test disk
+              run: |
+                  qemu-img create -f qcow2 /tmp/test-disk.qcow2 20G
+
+            - name: Boot ISO in QEMU (headless, 30s smoke test)
+              run: |
+                  ISO=$(ls /tmp/iso/*.iso | head -1)
+                  timeout 60 qemu-system-x86_64 \
+                      -m 2048 \
+                      -smp 2 \
+                      -cdrom "$ISO" \
+                      -hda /tmp/test-disk.qcow2 \
+                      -bios /usr/share/ovmf/OVMF.fd \
+                      -nographic \
+                      -serial mon:stdio \
+                      -no-reboot \
+                      -append "console=ttyS0 quiet systemd.unit=multi-user.target" \
+                  || true
+                  echo "QEMU smoke test complete"
+
+    # ── Release to GitHub Releases ────────────────────────────
+    release:
+        name: Create GitHub Release
+        runs-on: ubuntu-latest
+        needs: [build-iso, test-iso]
+        if: startsWith(github.ref, 'refs/tags/v')
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Download ISO artifact
+              uses: actions/download-artifact@v4
+              with:
+                  path: /tmp/release
+
+            - name: Generate release notes
+              id: notes
+              run: |
+                  cat > /tmp/release-notes.md << 'EOF'
+                  ## ArchSick ${{ github.ref_name }}
+
+                  Arch Linux based distribution for low-end hardware.
+                  Developer: **lovevsick**
+
+                  ### Installation
+                  1. Flash ISO to USB with `dd if=archsick*.iso of=/dev/sdX bs=4M status=progress`
+                  2. Boot from USB
+                  3. Run the Calamares installer (desktop icon)
+
+                  ### Performance targets
+                  - Idle RAM: 200–450MB
+                  - Idle CPU: 0–2%
+                  - Boot to desktop: < 10s (SSD)
+
+                  ### Checksums
+                  See `SHA256SUMS` and `SHA512SUMS` in release assets.
+                  EOF
+
+            - name: Create Release
+              uses: softprops/action-gh-release@v2
+              with:
+                  body_path: /tmp/release-notes.md
+                  files: |
+                      /tmp/release/**/*.iso
+                      /tmp/release/**/SHA256SUMS
+                      /tmp/release/**/SHA512SUMS
+                  draft: false
+                  prerelease: ${{ contains(github.ref_name, 'rc') || contains(github.ref_name, 'beta') }}
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

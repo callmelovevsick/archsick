@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# ArchSick system update — pacman + yay
+echo "==> Updating ArchSick..."
+sudo pacman -Syu --noconfirm
+command -v yay &>/dev/null && yay -Syu --noconfirm
+echo "==> Done. Kernel: $(uname -r)"

@@ -1,0 +1,309 @@
+/* ============================================================
+   ArchSick GTK3 theme - gtk.css
+   Dark, minimal, Spelljinxer-inspired
+   Developer: lovevsick
+   ============================================================ */
+
+/* ── Variables (GTK3 doesn't support CSS vars natively, but
+   gresource themes can; put these in @define-color) ─────── */
+
+@define-color bg_color         #0d1117;
+@define-color bg_dark_color    #0a0d12;
+@define-color bg_light_color   #161b22;
+@define-color base_color       #0d1117;
+@define-color text_color       #c0caf5;
+@define-color text_dim_color   #a9b1d6;
+@define-color fg_dim_color     #565f89;
+@define-color borders          #1e2531;
+@define-color accent_color     #7dcfff;
+@define-color accent_dark      #5ba8d5;
+@define-color warning_color    #e0af68;
+@define-color error_color      #f7768e;
+@define-color success_color    #9ece6a;
+@define-color selected_bg_color    #283457;
+@define-color selected_fg_color    #c0caf5;
+@define-color scrollbar_bg_color   #161b22;
+@define-color scrollbar_slider_color #283457;
+@define-color wm_title_focused     #c0caf5;
+@define-color wm_title_unfocused   #565f89;
+
+/* ── Base ─────────────────────────────────────────────────── */
+* {
+    outline-width: 0;
+    -gtk-icon-style: symbolic;
+}
+
+window {
+    background-color: @bg_color;
+    color: @text_color;
+}
+
+.background {
+    background-color: @bg_color;
+    color: @text_color;
+}
+
+/* ── Header bar ───────────────────────────────────────────── */
+headerbar,
+.titlebar {
+    background-color: @bg_light_color;
+    border-bottom: 1px solid @borders;
+    padding: 4px 8px;
+    min-height: 32px;
+}
+
+headerbar .title {
+    color: @text_color;
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+headerbar .subtitle {
+    color: @text_dim_color;
+    font-size: 0.8em;
+}
+
+/* ── Buttons ──────────────────────────────────────────────── */
+button {
+    background-color: @bg_light_color;
+    border: 1px solid @borders;
+    border-radius: 4px;
+    color: @text_color;
+    padding: 4px 12px;
+    min-height: 28px;
+    transition: background-color 150ms ease;
+}
+
+button:hover {
+    background-color: @selected_bg_color;
+    border-color: @accent_color;
+}
+
+button:active {
+    background-color: @accent_color;
+    color: @bg_color;
+}
+
+button:disabled {
+    color: @fg_dim_color;
+    background-color: @bg_color;
+}
+
+.suggested-action button,
+button.suggested-action {
+    background-color: @accent_color;
+    color: @bg_color;
+    border-color: @accent_dark;
+}
+
+.destructive-action button,
+button.destructive-action {
+    background-color: @error_color;
+    color: @bg_color;
+}
+
+/* ── Entries ──────────────────────────────────────────────── */
+entry,
+spinbutton {
+    background-color: @bg_light_color;
+    border: 1px solid @borders;
+    border-radius: 4px;
+    color: @text_color;
+    caret-color: @accent_color;
+    padding: 4px 8px;
+}
+
+entry:focus {
+    border-color: @accent_color;
+    outline: none;
+}
+
+entry:disabled {
+    color: @fg_dim_color;
+    background-color: @bg_color;
+}
+
+/* ── Menus ────────────────────────────────────────────────── */
+menu,
+.menu,
+.context-menu,
+.popup {
+    background-color: @bg_light_color;
+    border: 1px solid @borders;
+    border-radius: 6px;
+    padding: 4px 0;
+}
+
+menuitem {
+    padding: 4px 16px;
+    color: @text_color;
+}
+
+menuitem:hover {
+    background-color: @selected_bg_color;
+    color: @accent_color;
+}
+
+menuitem:disabled {
+    color: @fg_dim_color;
+}
+
+separator {
+    background-color: @borders;
+    min-height: 1px;
+    margin: 4px 0;
+}
+
+/* ── Selection ────────────────────────────────────────────── */
+selection,
+*:selected,
+.view:selected,
+textview text:selected {
+    background-color: @selected_bg_color;
+    color: @selected_fg_color;
+}
+
+/* ── Scrollbars ───────────────────────────────────────────── */
+scrollbar {
+    background-color: transparent;
+    border: none;
+}
+
+scrollbar slider {
+    background-color: @scrollbar_slider_color;
+    border-radius: 6px;
+    min-width: 6px;
+    min-height: 6px;
+    margin: 2px;
+}
+
+scrollbar slider:hover {
+    background-color: @accent_color;
+}
+
+scrollbar.vertical slider {
+    min-width: 6px;
+}
+
+scrollbar.horizontal slider {
+    min-height: 6px;
+}
+
+/* ── Lists / rows ─────────────────────────────────────────── */
+.list,
+listbox {
+    background-color: @bg_color;
+    border: 1px solid @borders;
+}
+
+listboxrow,
+row {
+    padding: 4px 8px;
+    color: @text_color;
+}
+
+listboxrow:hover,
+row:hover {
+    background-color: @bg_light_color;
+}
+
+listboxrow:selected,
+row:selected {
+    background-color: @selected_bg_color;
+    color: @accent_color;
+}
+
+/* ── Notebook / tabs ──────────────────────────────────────── */
+notebook {
+    background-color: @bg_color;
+}
+
+notebook header {
+    background-color: @bg_light_color;
+    border-bottom: 1px solid @borders;
+}
+
+notebook header tab {
+    background-color: transparent;
+    color: @text_dim_color;
+    padding: 6px 16px;
+    border-bottom: 2px solid transparent;
+}
+
+notebook header tab:checked {
+    color: @accent_color;
+    border-bottom-color: @accent_color;
+}
+
+notebook header tab:hover {
+    color: @text_color;
+    background-color: @bg_color;
+}
+
+/* ── Progress bars ────────────────────────────────────────── */
+progressbar trough {
+    background-color: @bg_light_color;
+    border-radius: 4px;
+    min-height: 6px;
+}
+
+progressbar progress {
+    background-color: @accent_color;
+    border-radius: 4px;
+}
+
+/* ── Checkboxes / radio ───────────────────────────────────── */
+checkbutton check,
+radiobutton radio {
+    background-color: @bg_light_color;
+    border: 1px solid @borders;
+    border-radius: 3px;
+    min-width: 16px;
+    min-height: 16px;
+}
+
+checkbutton check:checked,
+radiobutton radio:checked {
+    background-color: @accent_color;
+    border-color: @accent_color;
+    color: @bg_color;
+}
+
+/* ── Tooltips ────────────────────────────────────────────────*/
+tooltip {
+    background-color: @bg_light_color;
+    border: 1px solid @borders;
+    border-radius: 4px;
+    color: @text_color;
+    padding: 4px 8px;
+}
+
+/* ── File chooser ────────────────────────────────────────────*/
+.path-bar button {
+    padding: 2px 6px;
+}
+
+/* ── Text views ──────────────────────────────────────────────*/
+textview {
+    background-color: @bg_color;
+    color: @text_color;
+}
+
+textview text {
+    background-color: @bg_color;
+    color: @text_color;
+}
+
+/* ── Info bars ───────────────────────────────────────────────*/
+infobar {
+    background-color: @bg_light_color;
+    border-bottom: 1px solid @borders;
+}
+
+infobar.warning {
+    background-color: shade(@warning_color, 0.2);
+}
+
+infobar.error {
+    background-color: shade(@error_color, 0.2);
+}

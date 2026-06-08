@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    ArchSick Openbox configuration
+    Based on Spelljinxer dotfiles aesthetic
+    Developer: lovevsick
+-->
+<openbox_config xmlns="http://openbox.org/3.4/rc"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+
+<!-- ── Focus behavior ──────────────────────────────────────── -->
+<focus>
+    <focusNew>yes</focusNew>
+    <followMouse>no</followMouse>
+    <focusLast>yes</focusLast>
+    <underMouse>no</underMouse>
+    <focusDelay>200</focusDelay>
+    <raiseOnFocus>no</raiseOnFocus>
+</focus>
+
+<!-- ── Placement ────────────────────────────────────────────── -->
+<placement>
+    <policy>Smart</policy>
+    <center>yes</center>
+    <monitor>Primary</monitor>
+    <primaryMonitor>1</primaryMonitor>
+</placement>
+
+<!-- ── Theme ─────────────────────────────────────────────────── -->
+<theme>
+    <name>ArchSick</name>
+    <titleLayout>NLIMC</titleLayout>
+    <keepBorder>yes</keepBorder>
+    <animateIconify>no</animateIconify>
+    <font place="ActiveWindow">
+        <name>JetBrains Mono</name>
+        <size>10</size>
+        <weight>Bold</weight>
+        <slant>Normal</slant>
+    </font>
+    <font place="InactiveWindow">
+        <name>JetBrains Mono</name>
+        <size>10</size>
+        <weight>Normal</weight>
+        <slant>Normal</slant>
+    </font>
+    <font place="MenuHeader">
+        <name>JetBrains Mono</name>
+        <size>10</size>
+        <weight>Bold</weight>
+        <slant>Normal</slant>
+    </font>
+    <font place="MenuItem">
+        <name>JetBrains Mono</name>
+        <size>10</size>
+        <weight>Normal</weight>
+        <slant>Normal</slant>
+    </font>
+    <font place="ActiveOnScreenDisplay">
+        <name>JetBrains Mono</name>
+        <size>10</size>
+        <weight>Bold</weight>
+        <slant>Normal</slant>
+    </font>
+</theme>
+
+<!-- ── Desktops ──────────────────────────────────────────────── -->
+<desktops>
+    <number>4</number>
+    <firstdesk>1</firstdesk>
+    <names>
+        <name>DEV</name>
+        <name>WEB</name>
+        <name>GAME</name>
+        <name>MISC</name>
+    </names>
+    <popupTime>875</popupTime>
+</desktops>
+
+<!-- ── Resize / move ─────────────────────────────────────────── -->
+<resize>
+    <drawContents>yes</drawContents>
+    <popupShow>Nonpixel</popupShow>
+    <popupPosition>Center</popupPosition>
+</resize>
+
+<!-- ── Margins ───────────────────────────────────────────────── -->
+<margins>
+    <top>0</top>
+    <bottom>30</bottom>
+    <left>0</left>
+    <right>0</right>
+</margins>
+
+<!-- ── Dock ──────────────────────────────────────────────────── -->
+<dock>
+    <position>Bottom</position>
+    <floatingX>0</floatingX>
+    <floatingY>0</floatingY>
+    <noStrut>no</noStrut>
+    <stacking>Above</stacking>
+    <direction>Horizontal</direction>
+    <autoHide>no</autoHide>
+    <hideDelay>300</hideDelay>
+    <showDelay>300</showDelay>
+    <moveButton>Middle</moveButton>
+</dock>
+
+<!-- ── Keyboard bindings ─────────────────────────────────────── -->
+<keyboard>
+    <chainQuitKey>C-g</chainQuitKey>
+
+    <!-- Applications -->
+    <keybind key="super-Return">
+        <action name="Execute"><command>alacritty</command></action>
+    </keybind>
+    <keybind key="super-e">
+        <action name="Execute"><command>thunar</command></action>
+    </keybind>
+    <keybind key="super-space">
+        <action name="Execute"><command>rofi -show drun -theme /etc/archsick/rofi/launcher.rasi</command></action>
+    </keybind>
+    <keybind key="super-r">
+        <action name="Execute"><command>rofi -show run -theme /etc/archsick/rofi/launcher.rasi</command></action>
+    </keybind>
+    <keybind key="super-w">
+        <action name="Execute"><command>rofi -show window -theme /etc/archsick/rofi/launcher.rasi</command></action>
+    </keybind>
+    <keybind key="super-shift-q">
+        <action name="Execute"><command>archsick-powermenu</command></action>
+    </keybind>
+
+    <!-- Screenshots -->
+    <keybind key="Print">
+        <action name="Execute"><command>scrot ~/Pictures/Screenshots/%Y-%m-%d_%H%M%S.png</command></action>
+    </keybind>
+    <keybind key="super-Print">
+        <action name="Execute"><command>scrot -s ~/Pictures/Screenshots/%Y-%m-%d_%H%M%S.png</command></action>
+    </keybind>
+
+    <!-- Volume (pipewire/pamixer) -->
+    <keybind key="XF86AudioRaiseVolume">
+        <action name="Execute"><command>pamixer -i 5 &amp;&amp; dunstify -h string:x-dunst-stack-tag:vol "Vol: $(pamixer --get-volume)%"</command></action>
+    </keybind>
+    <keybind key="XF86AudioLowerVolume">
+        <action name="Execute"><command>pamixer -d 5 &amp;&amp; dunstify -h string:x-dunst-stack-tag:vol "Vol: $(pamixer --get-volume)%"</command></action>
+    </keybind>
+    <keybind key="XF86AudioMute">
+        <action name="Execute"><command>pamixer -t &amp;&amp; dunstify -h string:x-dunst-stack-tag:vol "Muted: $(pamixer --get-mute)"</command></action>
+    </keybind>
+
+    <!-- Brightness (brightnessctl) -->
+    <keybind key="XF86MonBrightnessUp">
+        <action name="Execute"><command>brightnessctl s +10% &amp;&amp; dunstify -h string:x-dunst-stack-tag:bright "Brightness: $(brightnessctl g)"</command></action>
+    </keybind>
+    <keybind key="XF86MonBrightnessDown">
+        <action name="Execute"><command>brightnessctl s 10%- &amp;&amp; dunstify -h string:x-dunst-stack-tag:bright "Brightness: $(brightnessctl g)"</command></action>
+    </keybind>
+
+    <!-- Window management -->
+    <keybind key="super-q">
+        <action name="Close"/>
+    </keybind>
+    <keybind key="super-f">
+        <action name="ToggleMaximizeFull"/>
+    </keybind>
+    <keybind key="super-shift-f">
+        <action name="ToggleFullscreen"/>
+    </keybind>
+    <keybind key="super-h">
+        <action name="Iconify"/>
+    </keybind>
+    <keybind key="A-Tab">
+        <action name="NextWindow">
+            <finalactions>
+                <action name="Focus"/>
+                <action name="Raise"/>
+                <action name="Unshade"/>
+            </finalactions>
+        </action>
+    </keybind>
+    <keybind key="A-shift-Tab">
+        <action name="PreviousWindow">
+            <finalactions>
+                <action name="Focus"/>
+                <action name="Raise"/>
+                <action name="Unshade"/>
+            </finalactions>
+        </action>
+    </keybind>
+
+    <!-- Snapping (vim-style) -->
+    <keybind key="super-Left">
+        <action name="UnmaximizeFull"/>
+        <action name="MoveResizeTo"><width>50%</width><height>100%</height><x>0</x><y>0</y></action>
+    </keybind>
+    <keybind key="super-Right">
+        <action name="UnmaximizeFull"/>
+        <action name="MoveResizeTo"><width>50%</width><height>100%</height><x>-0</x><y>0</y></action>
+    </keybind>
+    <keybind key="super-Up">
+        <action name="ToggleMaximizeFull"/>
+    </keybind>
+    <keybind key="super-Down">
+        <action name="UnmaximizeFull"/>
+        <action name="MoveResizeTo"><width>70%</width><height>70%</height><x>15%</x><y>15%</y></action>
+    </keybind>
+
+    <!-- Desktop switching -->
+    <keybind key="super-1">
+        <action name="GoToDesktop"><to>1</to></action>
+    </keybind>
+    <keybind key="super-2">
+        <action name="GoToDesktop"><to>2</to></action>
+    </keybind>
+    <keybind key="super-3">
+        <action name="GoToDesktop"><to>3</to></action>
+    </keybind>
+    <keybind key="super-4">
+        <action name="GoToDesktop"><to>4</to></action>
+    </keybind>
+    <keybind key="super-shift-1">
+        <action name="SendToDesktop"><to>1</to><follow>yes</follow></action>
+    </keybind>
+    <keybind key="super-shift-2">
+        <action name="SendToDesktop"><to>2</to><follow>yes</follow></action>
+    </keybind>
+    <keybind key="super-shift-3">
+        <action name="SendToDesktop"><to>3</to><follow>yes</follow></action>
+    </keybind>
+    <keybind key="super-shift-4">
+        <action name="SendToDesktop"><to>4</to><follow>yes</follow></action>
+    </keybind>
+
+    <!-- Openbox system -->
+    <keybind key="super-shift-r">
+        <action name="Reconfigure"/>
+    </keybind>
+    <keybind key="super-shift-e">
+        <action name="Exit">
+            <prompt>no</prompt>
+        </action>
+    </keybind>
+</keyboard>
+
+<!-- ── Mouse bindings ────────────────────────────────────────── -->
+<mouse>
+    <dragThreshold>1</dragThreshold>
+    <doubleClickTime>200</doubleClickTime>
+    <screenEdgeWarpTime>400</screenEdgeWarpTime>
+    <screenEdgeWarpMouse>false</screenEdgeWarpMouse>
+
+    <context name="Frame">
+        <mousebind button="A-Left" action="Press">
+            <action name="Focus"/>
+            <action name="Raise"/>
+        </mousebind>
+        <mousebind button="A-Left" action="Click">
+            <action name="Focus"/>
+        </mousebind>
+        <mousebind button="A-Left" action="Drag">
+            <action name="Move"/>
+        </mousebind>
+        <mousebind button="A-Right" action="Drag">
+            <action name="Resize"/>
+        </mousebind>
+        <mousebind button="A-Middle" action="Press">
+            <action name="Lower"/>
+        </mousebind>
+        <mousebind button="A-Up" action="Click">
+            <action name="GoToDesktop"><to>previous</to></action>
+        </mousebind>
+        <mousebind button="A-Down" action="Click">
+            <action name="GoToDesktop"><to>next</to></action>
+        </mousebind>
+    </context>
+
+    <context name="Titlebar">
+        <mousebind button="Left" action="Press">
+            <action name="Focus"/>
+            <action name="Raise"/>
+        </mousebind>
+        <mousebind button="Left" action="Drag">
+            <action name="Move"/>
+        </mousebind>
+        <mousebind button="Left" action="DoubleClick">
+            <action name="ToggleMaximizeFull"/>
+        </mousebind>
+        <mousebind button="Right" action="Press">
+            <action name="Focus"/>
+            <action name="Raise"/>
+            <action name="ShowMenu"><menu>client-menu</menu></action>
+        </mousebind>
+    </context>
+
+    <context name="Desktop">
+        <mousebind button="Right" action="Press">
+            <action name="ShowMenu"><menu>root-menu</menu></action>
+        </mousebind>
+        <mousebind button="Middle" action="Press">
+            <action name="ShowMenu"><menu>client-list-combined-menu</menu></action>
+        </mousebind>
+        <mousebind button="Up" action="Click">
+            <action name="GoToDesktop"><to>previous</to></action>
+        </mousebind>
+        <mousebind button="Down" action="Click">
+            <action name="GoToDesktop"><to>next</to></action>
+        </mousebind>
+    </context>
+</mouse>
+
+<!-- ── Applications ──────────────────────────────────────────── -->
+<applications>
+    <application name="*">
+        <focus>yes</focus>
+    </application>
+    <!-- Float some apps -->
+    <application name="pavucontrol">
+        <floating>yes</floating>
+        <position force="yes"><x>center</x><y>center</y></position>
+        <size><width>700</width><height>400</height></size>
+    </application>
+    <application name="nm-connection-editor">
+        <floating>yes</floating>
+        <position force="yes"><x>center</x><y>center</y></position>
+    </application>
+    <application name="lxappearance">
+        <floating>yes</floating>
+        <position force="yes"><x>center</x><y>center</y></position>
+    </application>
+    <!-- Alacritty → workspace 1 -->
+    <application name="Alacritty">
+        <desktop>1</desktop>
+    </application>
+    <!-- Gaming workspace 3 -->
+    <application name="steam">
+        <desktop>3</desktop>
+    </application>
+    <application name="osu!">
+        <desktop>3</desktop>
+        <maximized>yes</maximized>
+    </application>
+    <application name="PrismLauncher">
+        <desktop>3</desktop>
+    </application>
+</applications>
+
+</openbox_config>

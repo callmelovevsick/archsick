@@ -1,0 +1,130 @@
+/* ============================================================
+   ArchSick Rofi launcher theme
+   Inspired by Spelljinxer dotfiles
+   Developer: lovevsick
+   ============================================================ */
+
+* {
+    /* Color palette */
+    bg0:      #0d1117;
+    bg1:      #161b22;
+    bg2:      #1e2531;
+    bg3:      #283457;
+    fg0:      #c0caf5;
+    fg1:      #a9b1d6;
+    fg2:      #565f89;
+    accent:   #7dcfff;
+    urgent:   #f7768e;
+    ok:       #9ece6a;
+
+    font:                 "JetBrains Mono 12";
+    background-color:     transparent;
+    text-color:           @fg0;
+    border-color:         transparent;
+    outline-color:        transparent;
+}
+
+window {
+    width:               520px;
+    border:              1px;
+    border-color:        @bg3;
+    border-radius:       10px;
+    background-color:    @bg0;
+    padding:             0;
+}
+
+mainbox {
+    background-color:    transparent;
+    padding:             0;
+    children:            [ inputbar, message, listview ];
+}
+
+inputbar {
+    background-color:    @bg1;
+    border-radius:       10px 10px 0 0;
+    padding:             10px 14px;
+    children:            [ prompt, entry ];
+}
+
+prompt {
+    background-color:    transparent;
+    text-color:          @accent;
+    padding:             0 6px 0 0;
+}
+
+entry {
+    background-color:    transparent;
+    text-color:          @fg0;
+    placeholder-color:   @fg2;
+    placeholder:         "Search...";
+    cursor:              text;
+    blink:               true;
+}
+
+listview {
+    background-color:    transparent;
+    padding:             6px 0;
+    columns:             1;
+    lines:               8;
+    scrollbar:           false;
+    cycle:               true;
+    dynamic:             true;
+    layout:              vertical;
+    fixed-height:        true;
+    spacing:             0;
+}
+
+element {
+    background-color:    transparent;
+    padding:             7px 14px;
+    border-radius:       0;
+    spacing:             10px;
+    children:            [ element-icon, element-text ];
+}
+
+element selected.normal {
+    background-color:    @bg2;
+    border-left:         3px solid @accent;
+    border-radius:       0;
+}
+
+element-icon {
+    size:                20px;
+    vertical-align:      0.5;
+}
+
+element-text {
+    text-color:          @fg0;
+    highlight:           bold @accent;
+    vertical-align:      0.5;
+}
+
+element selected .element-text {
+    text-color:          @fg0;
+}
+
+element urgent {
+    background-color:    transparent;
+    text-color:          @urgent;
+}
+
+element active {
+    text-color:          @accent;
+}
+
+message {
+    background-color:    transparent;
+    padding:             4px 14px;
+}
+
+textbox {
+    text-color:          @fg1;
+    font:                "JetBrains Mono 10";
+    background-color:    transparent;
+}
+
+error-message {
+    text-color:          @urgent;
+    background-color:    transparent;
+    padding:             4px 14px;
+}

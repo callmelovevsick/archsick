@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openbox_menu xmlns="http://openbox.org/3.4/menu"
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://openbox.org/3.4/menu">
+
+<menu id="root-menu" label="ArchSick">
+    <item label="Terminal">
+        <action name="Execute"><command>alacritty</command></action>
+    </item>
+    <item label="File Manager">
+        <action name="Execute"><command>thunar</command></action>
+    </item>
+    <item label="App Launcher">
+        <action name="Execute"><command>rofi -show drun -theme /etc/archsick/rofi/launcher.rasi</command></action>
+    </item>
+    <separator />
+    <menu id="apps-menu" label="Applications">
+        <item label="VSCodium">
+            <action name="Execute"><command>codium</command></action>
+        </item>
+        <item label="Firefox">
+            <action name="Execute"><command>firefox</command></action>
+        </item>
+        <item label="Geany">
+            <action name="Execute"><command>geany</command></action>
+        </item>
+        <separator />
+        <item label="Steam">
+            <action name="Execute"><command>steam</command></action>
+        </item>
+        <item label="osu!lazer">
+            <action name="Execute"><command>gamemoderun osu</command></action>
+        </item>
+        <item label="Prism Launcher (Minecraft)">
+            <action name="Execute"><command>gamemoderun prismlauncher</command></action>
+        </item>
+    </menu>
+    <menu id="settings-menu" label="Settings">
+        <item label="Appearance (lxappearance)">
+            <action name="Execute"><command>lxappearance</command></action>
+        </item>
+        <item label="Openbox Settings">
+            <action name="Execute"><command>obconf</command></action>
+        </item>
+        <item label="Network Connections">
+            <action name="Execute"><command>nm-connection-editor</command></action>
+        </item>
+        <item label="Volume">
+            <action name="Execute"><command>pavucontrol</command></action>
+        </item>
+    </menu>
+    <separator />
+    <item label="Power Menu">
+        <action name="Execute"><command>archsick-powermenu</command></action>
+    </item>
+    <item label="Reload Openbox">
+        <action name="Reconfigure"/>
+    </item>
+</menu>
+
+<menu id="client-list-combined-menu">
+    <separator label="Workspaces" />
+    <menu id="client-list-menu" execute="archsick-openbox-clientlist" />
+</menu>
+
+</openbox_menu>

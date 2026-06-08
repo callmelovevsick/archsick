@@ -1,0 +1,112 @@
+# ============================================================
+# ArchSick Alacritty terminal configuration
+# Inspired by Spelljinxer dotfiles color scheme
+# Developer: lovevsick
+# ============================================================
+
+[env]
+TERM = "xterm-256color"
+
+[window]
+padding = { x = 12, y = 10 }
+decorations = "none"
+opacity = 0.92
+blur = false
+startup_mode = "Windowed"
+title = "ArchSick Terminal"
+dynamic_title = true
+resize_increments = false
+
+[scrolling]
+history = 10000
+multiplier = 3
+
+[font]
+size = 12.5
+
+[font.normal]
+family = "JetBrains Mono"
+style = "Regular"
+
+[font.bold]
+family = "JetBrains Mono"
+style = "Bold"
+
+[font.italic]
+family = "JetBrains Mono"
+style = "Italic"
+
+[font.bold_italic]
+family = "JetBrains Mono"
+style = "Bold Italic"
+
+# ── ArchSick dark color scheme ────────────────────────────────
+# Accent: #7dcfff (cyan) / #c0caf5 (lavender white)
+# Background depth: #0d1117 → #161b22 → #1e2531
+
+[colors.primary]
+background = "#0d1117"
+foreground = "#c0caf5"
+
+[colors.cursor]
+text   = "#0d1117"
+cursor = "#7dcfff"
+
+[colors.selection]
+text       = "CellForeground"
+background = "#283457"
+
+[colors.normal]
+black   = "#15161e"
+red     = "#f7768e"
+green   = "#9ece6a"
+yellow  = "#e0af68"
+blue    = "#7aa2f7"
+magenta = "#bb9af7"
+cyan    = "#7dcfff"
+white   = "#a9b1d6"
+
+[colors.bright]
+black   = "#414868"
+red     = "#f7768e"
+green   = "#9ece6a"
+yellow  = "#e0af68"
+blue    = "#7aa2f7"
+magenta = "#bb9af7"
+cyan    = "#7dcfff"
+white   = "#c0caf5"
+
+[colors.indexed_colors]
+# Extra accent colors
+# 16: orange  17: dark orange
+{ index = 16, color = "#ff9e64" }
+{ index = 17, color = "#db4b4b" }
+
+[bell]
+animation = "EaseOut"
+duration = 0
+color = "#ffffff"
+
+[selection]
+save_to_clipboard = true
+
+[cursor]
+style = { shape = "Block", blinking = "Off" }
+vi_mode_style = { shape = "Block", blinking = "On" }
+blink_interval = 750
+
+[mouse]
+hide_when_typing = true
+
+[keyboard]
+bindings = [
+    { key = "V",        mods = "Control|Shift", action = "Paste" },
+    { key = "C",        mods = "Control|Shift", action = "Copy"  },
+    { key = "Insert",   mods = "Shift",          action = "PasteSelection" },
+    { key = "Key0",     mods = "Control",        action = "ResetFontSize" },
+    { key = "Equals",   mods = "Control",        action = "IncreaseFontSize" },
+    { key = "Minus",    mods = "Control",        action = "DecreaseFontSize" },
+    { key = "F11",      mods = "None",           action = "ToggleFullscreen" },
+    { key = "PageUp",   mods = "Shift",          action = "ScrollPageUp"  },
+    { key = "PageDown", mods = "Shift",          action = "ScrollPageDown" },
+]

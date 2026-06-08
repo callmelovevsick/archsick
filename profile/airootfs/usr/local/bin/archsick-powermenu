@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# ============================================================
+# ArchSick power menu (Rofi)
+# /usr/local/bin/archsick-powermenu
+# Developer: lovevsick
+# ============================================================
+
+ROFI_THEME="/etc/archsick/rofi/powermenu.rasi"
+[[ ! -f "$ROFI_THEME" ]] && ROFI_THEME="/etc/archsick/rofi/launcher.rasi"
+
+OPTIONS="⏻ Shutdown\n⟳ Reboot\n⏾ Suspend\n⏽ Hibernate\n  Lock\n⎋ Logout"
+CHOSEN=$(echo -e "$OPTIONS" | rofi \
+    -dmenu \
+    -i \
+    -no-fixed-num-lines \
+    -p "Power" \
+    -theme "$ROFI_THEME" \
+    -theme-str 'window{width:240px;} listview{lines:6;}')
+
+case "$CHOSEN" in
+    *"Shutdown"*)   systemctl poweroff ;;
+    *"Reboot"*)     systemctl reboot ;;
+    *"Suspend"*)    systemctl suspend ;;
+    *"Hibernate"*)  systemctl hibernate ;;
+    *"Lock"*)       i3lock -c 0d1117 2>/dev/null || xscreensaver-command -lock 2>/dev/null || true ;;
+    *"Logout"*)     openbox --exit 2>/dev/null || pkill -SIGTERM openbox ;;
+esac

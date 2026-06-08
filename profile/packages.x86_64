@@ -1,22 +1,21 @@
-## Arch Packages ------------------------------
+## ============================================================
+## ArchSick packages.x86_64
+## Forked from Archcraft — stripped, rebranded, dev-optimised
+## Developer: lovevsick
+## ============================================================
+
+## ── Arch base ───────────────────────────────────────────────
 alsa-utils
 amd-ucode
 arch-install-scripts
-archinstall
 b43-fwcutter
 base
+base-devel
 bcachefs-tools
 bind
-bolt
-brltty
-broadcom-wl
 btrfs-progs
-clonezilla
-cloud-init
 cryptsetup
-darkhttpd
 ddrescue
-#dhclient
 dhcpcd
 diffutils
 dmidecode
@@ -24,48 +23,32 @@ dmraid
 dnsmasq
 dosfstools
 e2fsprogs
-edk2-shell
 efibootmgr
-#espeakup
 ethtool
 exfatprogs
 f2fs-tools
-fatresize
-foot-terminfo
 fsarchiver
-#gnu-netcat
 gpart
 gpm
 gptfdisk
-#grml-zsh-config
-#grub
 hdparm
-hyperv
 intel-ucode
-irssi
 iw
 iwd
 jfsutils
-kitty-terminfo
 ldns
 less
 lftp
 libfido2
-libusb-compat
 linux
-linux-atm
 linux-firmware
 linux-firmware-marvell
-#livecd-sounds
+linux-headers
 lsscsi
 lvm2
 lynx
 man-db
 man-pages
-mc
-mdadm
-memtest86+
-memtest86+-efi
 mkinitcpio
 mkinitcpio-archiso
 mkinitcpio-nfs-utils
@@ -81,27 +64,16 @@ nmap
 ntfs-3g
 nvme-cli
 open-iscsi
-open-vm-tools
-openconnect
-openpgp-card-tools
 openssh
 openvpn
 partclone
 parted
 partimage
-pcsclite
 ppp
-pptpclient
 pv
-#qemu-guest-agent
-refind
-reflector
-#rp-pppoe
 rsync
-rxvt-unicode-terminfo
 screen
 sdparm
-sequoia-sq
 sg3_utils
 smartmontools
 sof-firmware
@@ -117,43 +89,37 @@ tpm2-tools
 tpm2-tss
 udftools
 usb_modeswitch
-usbmuxd
 usbutils
 vim
-#virtualbox-guest-utils-nox
-vpnc
 wireless-regdb
 wireless_tools
 wpa_supplicant
-wvdial
 xdg-utils
 xfsprogs
-xl2tpd
 zsh
 
-## Bootloader ------------------------------
+## ── Bootloader ──────────────────────────────────────────────
 os-prober
 lsb-release
 archcraft/grub
 archcraft-hooks-grub
 archcraft-grub-theme
 
-## Splash Screen ------------------------------
+## ── Plymouth splash ─────────────────────────────────────────
 archcraft/plymouth
 archcraft-plymouth-theme
 
-## Archcraft Specific ------------------------------
+## ── Archcraft shared hooks/mirrors ──────────────────────────
 archcraft-hooks
 archcraft-mirrorlist
 
-## Xorg Server ------------------------------
+## ── Xorg ────────────────────────────────────────────────────
 xorg
-
-## Touchpad and Mouse ------------------------------
 xorg-xinput
 xf86-input-libinput
 
-## GPU Drivers (Intel/AMD/VM) ------------------------------
+## ── GPU drivers ─────────────────────────────────────────────
+## Intel / AMD iGPU (primary target)
 xf86-video-fbdev
 xf86-video-vesa
 xf86-video-intel
@@ -161,55 +127,51 @@ xf86-video-amdgpu
 xf86-video-ati
 mesa
 mesa-utils
-
-## GPU Drivers (Nvidia) ------------------------------
+vulkan-intel
+vulkan-radeon
+libva-intel-driver
+intel-media-driver
+libva-utils
+## Nvidia (kept for compatibility)
 xf86-video-nouveau
-nvidia-open
-nvidia-utils
-nvidia-settings
-
-## Hypervisors ------------------------------
+## VM drivers
 virtualbox-guest-utils
 qemu-guest-agent
 open-vm-tools
 xf86-input-vmmouse
-#xf86-video-vmware
 
-## System ------------------------------
-
-## Networking
+## ── Networking ──────────────────────────────────────────────
 networkmanager
 networkmanager-openconnect
 networkmanager-openvpn
 networkmanager-pptp
 networkmanager-strongswan
 networkmanager-vpnc
-network-manager-sstp
 nm-connection-editor
 network-manager-applet
 ufw
 gufw
 
-## Bluetooth
+## ── Bluetooth ────────────────────────────────────────────────
 bluez
 bluez-utils
 blueman
 
-## Audio
+## ── Audio (PipeWire) ────────────────────────────────────────
 pipewire
 wireplumber
 pipewire-alsa
 pipewire-pulse
 pipewire-jack
-pulsemixer
 pavucontrol
+pamixer
+pulsemixer
 gst-plugin-pipewire
 
-## Video
+## ── Video codecs ────────────────────────────────────────────
 libde265
 libdv
 libmpeg2
-schroedinger
 libtheora
 libvpx
 x264
@@ -222,111 +184,179 @@ gst-plugins-good
 gst-plugins-ugly
 gst-plugins-bad
 
-## Print
+## ── Print ────────────────────────────────────────────────────
 cups
 cups-pdf
 cups-filters
 ghostscript
 gsfonts
-foomatic-db-engine
-foomatic-db
-gutenprint
 
-## Installer ------------------------------
-
-## Calamares
+## ── Installer ───────────────────────────────────────────────
 boost
 calamares
 calamares-config
-
-## ABIF
 archcraft-installer
 archcraft-install-scripts
 
-## QT Style
+## ── Qt theming ───────────────────────────────────────────────
 qt6ct
 qt5ct
 kvantum
 kvantum-qt5
 
-## Display Manager ------------------------------
+## ── Display manager ─────────────────────────────────────────
 sddm-git
 archcraft-sddm-theme
 
-## Desktop ------------------------------
+## ── Memory compression ──────────────────────────────────────
+zram-generator
 
-# Terminal
+## ── Power management ─────────────────────────────────────────
+acpi
+acpid
+tlp
+cpupower
+brightnessctl
+xfce4-power-manager
+
+## ── Window managers ─────────────────────────────────────────
+openbox
+archcraft-openbox
+bspwm
+sxhkd
+archcraft-bspwm
+obconf
+lxappearance
+
+## ── Compositor ───────────────────────────────────────────────
+picom
+
+## ── Panel ────────────────────────────────────────────────────
+tint2
+polybar
+
+## ── Launcher ─────────────────────────────────────────────────
+rofi
+
+## ── Notifications ────────────────────────────────────────────
+dunst
+libnotify
+
+## ── Terminal ─────────────────────────────────────────────────
 alacritty
 xfce4-terminal
-kitty
 
-# Apps
-firefox
-geany
-geany-plugins
+## ── File manager ─────────────────────────────────────────────
 thunar
 thunar-archive-plugin
 thunar-media-tags-plugin
 thunar-volman
+gvfs
+gvfs-mtp
+gvfs-afc
+gvfs-gphoto2
+gvfs-smb
+udisks2
+udiskie
+
+## ── Apps ─────────────────────────────────────────────────────
+firefox
+geany
+geany-plugins
 viewnior
 atril
+galculator
+gparted
+meld
+timeshift
 
-# Media
+## ── Media ────────────────────────────────────────────────────
 mpc
 mpd
 ncmpcpp
-mplayer
+mpv
+ffmpegthumbnailer
+tumbler
 
-# Utilities
-acpi
+## ── Screenshot ───────────────────────────────────────────────
+maim
+slop
+simplescreenrecorder
+
+## ── Utilities ────────────────────────────────────────────────
+btop
 dbus-broker-units
 dialog
-dunst
-galculator
-gparted
-#gtk-engine-murrine
 gnome-keyring
 inetutils
 inotify-tools
 iptables
 jq
-light
-meld
 nitrogen
-pastel
-picom
 plank
 polkit
-polybar
+polkit-gnome
 python-pywal
-rofi
-maim
-simplescreenrecorder
-slop
-timeshift
-udisks2
 wmctrl
 wmname
 xclip
 xcolor
 xdotool
-xfce4-power-manager
-xfce4-settings
-xmlstarlet
 xsettingsd
+xmlstarlet
 yad
 
-# WMs
-archcraft-openbox
-archcraft-bspwm
+## ── Fonts ─────────────────────────────────────────────────────
+noto-fonts
+noto-fonts-emoji
+noto-fonts-cjk
+terminus-font
+ttf-jetbrains-mono
+ttf-jetbrains-mono-nerd
+ttf-dejavu
+ttf-liberation
+otf-font-awesome
+ttf-nerd-fonts-symbols
+archcraft-fonts
 
-# Archcraft Packages
+## ── File utilities ───────────────────────────────────────────
+highlight
+trash-cli
+ueberzug
+xdg-user-dirs
+xdg-user-dirs-gtk
+jasper
+libwebp
+libavif
+libheif
+
+## ── Archives ─────────────────────────────────────────────────
+bzip2
+gzip
+lrzip
+lz4
+lzip
+lzop
+xz
+zstd
+p7zip
+zip
+unzip
+unrar
+unarchiver
+xarchiver
+
+## ── Security ─────────────────────────────────────────────────
+apparmor
+ufw
+fail2ban
+
+## ── Archcraft shared packages ────────────────────────────────
 archcraft-cursors
 archcraft-icons
 archcraft-themes
 archcraft-openbox-themes
 archcraft-wallpapers
-archcraft-fonts
 archcraft-skeleton
 archcraft-about
 archcraft-artworks
@@ -348,80 +378,70 @@ archcraft-config-qt
 archcraft-hooks-extra
 archcraft-hooks-zsh
 
-## Functionality ------------------------------
-
-## Fonts
-noto-fonts
-noto-fonts-emoji
-noto-fonts-cjk
-terminus-font
-
-## Multimedia
-ffmpeg
-ffmpegthumbnailer
-tumbler
-
-## Images
-jasper
-libwebp
-libavif
-libheif
-
-## Files
-gvfs
-gvfs-mtp
-gvfs-afc
-gvfs-gphoto2
-gvfs-smb
-gvfs-gphoto2
-highlight
-trash-cli
-ueberzug
-xdg-user-dirs
-xdg-user-dirs-gtk
-
-## Archives
-bzip2
-gzip
-lrzip
-lz4
-lzip
-lzop
-xz
-zstd
-p7zip
-zip
-unzip
-unrar
-unarchiver
-xarchiver
-
-## Misc ------------------------------
-
-## MAC
-apparmor
-
-## Package Tools
+## ── Development: C/C++ ───────────────────────────────────────
+gcc
+g++
+make
+cmake
+ninja
+binutils
+gdb
+lldb
+clang
+clang-tools-extra
+lld
+valgrind
 bison
 fakeroot
 flex
-make
 automake
 autoconf
 pkgconf
 patch
-gcc
 
-## CLI Tools
+## ── Development: Python ─────────────────────────────────────
+python
+python-pip
+python-setuptools
+python-wheel
+
+## ── Development: Node.js ────────────────────────────────────
+nodejs
+npm
+
+## ── Version control ─────────────────────────────────────────
+git
+
+## ── Java (Minecraft) ────────────────────────────────────────
+jdk-openjdk
+jre-openjdk
+
+## ── Gaming ───────────────────────────────────────────────────
+steam
+wine
+winetricks
+lutris
+gamemode
+lib32-gamemode
+mangohud
+lib32-mangohud
+vkd3d
+lib32-vkd3d
+lib32-vulkan-icd-loader
+vulkan-icd-loader
+
+## ── CLI Tools ────────────────────────────────────────────────
+fastfetch
 htop
-nethogs
 ncdu
 powertop
 ranger
-vim
+nethogs
 
-## AUR Packages
-betterlockscreen
+## ── AUR (installed at first-run, not from ISO) ───────────────
+## yay, vscodium-bin, osu-lazer-bin, prismlauncher-bin
+## handled by /usr/local/bin/archsick-firstrun
+
 downgrade
 gtk-nocsd-git
 i3lock-color
@@ -430,8 +450,7 @@ mkinitcpio-firmware
 networkmanager-dmenu-git
 obmenu-generator
 perl-linux-desktopfiles
-#rofi-lbonn-wayland-git
 xfce-polkit
 yay
 
-## EOF ------------------------------
+## ── EOF ──────────────────────────────────────────────────────

@@ -1,0 +1,164 @@
+# ============================================================
+# ArchSick tint2 panel configuration
+# Bottom bar, dark theme
+# Developer: lovevsick
+# ============================================================
+
+# ── Panel ─────────────────────────────────────────────────────
+panel_items = LTSC
+panel_size = 100% 30
+panel_margin = 0 0
+panel_padding = 2 0 2
+panel_background_id = 1
+wm_menu = 1
+panel_dock = 0
+panel_position = bottom center horizontal
+panel_layer = top
+panel_monitor = all
+panel_shrink = 0
+autohide = 0
+autohide_show_timeout = 0.3
+autohide_hide_timeout = 1.5
+autohide_height = 2
+strut_policy = follow_size
+panel_window_name = tint2
+disable_transparency = 0
+mouse_effects = 1
+font_shadow = 0
+mouse_hover_icon_asb = 100 0 10
+mouse_pressed_icon_asb = 100 0 -10
+scale_relative_to_dpi = 0
+scale_relative_to_screen_height = 0
+
+# ── Backgrounds ───────────────────────────────────────────────
+# BG 1: panel
+rounded = 0
+border_width = 0
+border_sides = T
+border_content_tint_weight = 0
+background_content_tint_weight = 0
+background_color = #0d1117 95
+border_color = #1e2531 100
+
+# BG 2: active task
+rounded = 4
+border_width = 0
+border_sides = B
+background_color = #161b22 100
+border_color = #7dcfff 100
+
+# BG 3: focused task (border bottom accent)
+rounded = 4
+border_width = 0
+border_sides = B
+background_color = #1e2531 100
+border_color = #7dcfff 100
+
+# BG 4: icon, tooltip
+rounded = 4
+border_width = 1
+border_sides = TBLR
+background_color = #161b22 95
+border_color = #1e2531 100
+
+# BG 5: systray
+rounded = 0
+border_width = 0
+border_sides = TBLR
+background_color = #0d1117 0
+border_color = #1e2531 0
+
+# ── Taskbar ───────────────────────────────────────────────────
+taskbar_mode = multi_desktop
+taskbar_distribute_size = 0
+taskbar_padding = 2 0 2
+taskbar_background_id = 0
+taskbar_active_background_id = 0
+taskbar_hide_if_empty = 0
+taskbar_always_show_all_desktop_tasks = 0
+taskbar_name = 1
+taskbar_hide_taskbar = 0
+taskbar_show_desktop = 1
+taskbar_sort_order = none
+taskbar_name_padding = 4 2
+taskbar_name_background_id = 0
+taskbar_name_active_background_id = 4
+taskbar_name_font = JetBrains Mono Bold 9
+taskbar_name_font_color = #565f89 100
+taskbar_name_active_font_color = #7dcfff 100
+
+# ── Tasks ──────────────────────────────────────────────────────
+task_text = 1
+task_icon = 1
+task_centered = 1
+urgent_nb_of_blink = 8
+task_maximum_size = 160 30
+task_padding = 4 3 4
+task_tooltip = 0
+task_thumbnail = 0
+task_thumbnail_size = 210
+task_background_id = 0
+task_active_background_id = 2
+task_urgent_background_id = 3
+task_iconified_background_id = 0
+task_font = JetBrains Mono 9
+task_font_color = #a9b1d6 100
+task_active_font_color = #c0caf5 100
+task_urgent_font_color = #f7768e 100
+task_iconified_font_color = #565f89 100
+task_icon_asb = 100 0 0
+task_active_icon_asb = 100 0 0
+task_urgent_icon_asb = 100 0 0
+task_iconified_icon_asb = 100 0 0
+mouse_left = toggle_iconify
+mouse_middle = close
+mouse_right = toggle_iconify
+mouse_scroll_up = prev_task
+mouse_scroll_down = next_task
+
+# ── Launcher ──────────────────────────────────────────────────
+launcher_padding = 4 3 4
+launcher_background_id = 0
+launcher_icon_background_id = 0
+launcher_icon_size = 20
+launcher_icon_asb = 100 0 0
+launcher_icon_theme_override = 0
+startup_notifications = 1
+launcher_tooltip = 1
+launcher_item_app = /usr/share/applications/rofi-launcher.desktop
+launcher_item_app = /usr/share/applications/thunar.desktop
+launcher_item_app = /usr/share/applications/codium.desktop
+
+# ── Clock ──────────────────────────────────────────────────────
+time1_format = %H:%M
+time2_format = %a %d %b
+time1_font = JetBrains Mono Bold 10
+time2_font = JetBrains Mono 8
+clock_font_color = #c0caf5 100
+clock_padding = 6 0
+clock_background_id = 0
+clock_tooltip = %A, %d %B %Y
+clock_tooltip_timezone =
+clock_lclick_command = gsimplecal 2>/dev/null || zenity --calendar 2>/dev/null
+clock_rclick_command =
+clock_mclick_command =
+clock_uwheel_command =
+clock_dwheel_command =
+
+# ── Systray ────────────────────────────────────────────────────
+systray_padding = 4 3 4
+systray_background_id = 5
+systray_sort = descending
+systray_icon_size = 18
+systray_icon_asb = 100 0 0
+systray_monitor = 1
+systray_name_filter =
+
+# ── Tooltip ────────────────────────────────────────────────────
+tooltip = 1
+tooltip_show_timeout = 0.5
+tooltip_hide_timeout = 0.1
+tooltip_padding = 4 4
+tooltip_background_id = 4
+tooltip_font_color = #c0caf5 100
+tooltip_font = JetBrains Mono 9

@@ -1,0 +1,82 @@
+# ============================================================
+# ArchSick GRUB Theme - theme.txt
+# Install to: /usr/share/grub/themes/archsick/
+# Set in /etc/default/grub: GRUB_THEME="/usr/share/grub/themes/archsick/theme.txt"
+# Developer: lovevsick
+# ============================================================
+
+# Global colors
+desktop-color: "#0d1117"
+title-text: ""
+title-font: "JetBrains Mono Bold 18"
+title-color: "#7dcfff"
+
+# Message
+message-font: "JetBrains Mono Regular 12"
+message-color: "#c0caf5"
+message-bg-color: "#161b22"
+
+# Terminal (if used)
+terminal-font: "JetBrains Mono Regular 12"
+terminal-left: "0%"
+terminal-top: "0%"
+terminal-width: "100%"
+terminal-height: "100%"
+terminal-border: "0"
+
+# ── Boot menu ─────────────────────────────────────────────────
++ boot_menu {
+    left   = 50% - 300
+    top    = 40%
+    width  = 600
+    height = 240
+    item_font      = "JetBrains Mono Regular 13"
+    item_color     = "#a9b1d6"
+    selected_item_color  = "#c0caf5"
+    selected_item_pixmap_style = "select_c"
+    item_height    = 32
+    item_padding   = 14
+    item_spacing   = 4
+    scrollbar      = false
+    icon_width     = 0
+    icon_height    = 0
+}
+
+# ── Progress bar ──────────────────────────────────────────────
++ progress_bar {
+    id        = "__timeout__"
+    left      = 50% - 150
+    top       = 92%
+    width     = 300
+    height    = 4
+    fg_color  = "#7dcfff"
+    bg_color  = "#1e2531"
+    border_color = "#283457"
+    text      = ""
+    font      = "JetBrains Mono Regular 10"
+    text_color = "#565f89"
+    align     = center
+    bar_style = "progress_bar"
+}
+
+# ── Version label ─────────────────────────────────────────────
++ label {
+    top   = 5%
+    left  = 50% - 150
+    width = 300
+    align = center
+    id    = "__archsick_label__"
+    text  = "ArchSick"
+    color = "#7dcfff"
+    font  = "JetBrains Mono Bold 16"
+}
+
++ label {
+    top   = 8%
+    left  = 50% - 150
+    width = 300
+    align = center
+    text  = "by lovevsick"
+    color = "#565f89"
+    font  = "JetBrains Mono Regular 10"
+}
